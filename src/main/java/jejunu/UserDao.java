@@ -1,11 +1,16 @@
 package jejunu;
 
+import javax.sql.DataSource;
 import java.sql.*;
 
-public abstract class UserDao implements connectionMaker {
-    @Override
+public class UserDao {
+    private final DataSource dataSource;
+
+    public UserDao(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
     public User findById(Integer id) throws ClassNotFoundException, SQLException {
-        Connection connection = getConnection();
+        Connection connection = dataSource.getConnection();
         //sql
         PreparedStatement preparedStatement =
                 connection.prepareStatement(
@@ -27,5 +32,4 @@ public abstract class UserDao implements connectionMaker {
         //리턴
         return user;
 }
-    public abstract Connection getConnection() throws ClassNotFoundException, SQLException;
 }
