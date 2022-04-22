@@ -9,6 +9,7 @@ import java.sql.SQLException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
 
 public class UserDaoTests {
@@ -21,7 +22,7 @@ public class UserDaoTests {
         userDao = applicationContext.getBean("userDao", UserDao.class);
     }
     @Test
-    public void jejuget() throws SQLException, ClassNotFoundException {
+    public void findById() throws SQLException, ClassNotFoundException {
         Integer id = 1;
         String name = "hulk";
         String password = "1234";
@@ -45,5 +46,41 @@ public class UserDaoTests {
         User insertedUser = userDao.findById(user.getId());
         assertThat(insertedUser.getName(), is(user.getName()));
         assertThat(insertedUser.getPassword(), is(user.getPassword()));
+    }
+
+    @Test
+    public void update() throws SQLException, ClassNotFoundException {
+
+        User user = new User();
+        user.setName("insert");
+        user.setPassword("4123");
+        userDao.insert(user);
+
+        String updatedName = "update";
+        String updatedPassword = "3142";
+
+        user.setName(updatedName);
+        user.setPassword(updatedPassword);
+
+        userDao.update(user);
+        User updatedUser = userDao.findById(user.getId());
+
+        assertThat(updatedUser.getName(), is(updatedName));
+        assertThat(updatedUser.getPassword(), is(updatedPassword));
+
+    }
+
+    @Test
+    public void delete() throws SQLException, ClassNotFoundException {
+
+        User user = new User();
+        user.setPassword("7654");
+        user.setName("deleted");
+        userDao.insert(user);
+
+        userDao.delete(user.getId());
+
+        User deletedUser = userDao.findById(user.getId());
+        assertThat(deletedUser, nullValue());
     }
 }
