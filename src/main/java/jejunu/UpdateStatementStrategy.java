@@ -5,12 +5,16 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class UpdateStatementStrategy implements StatementStrategy {
+    private User user;
+    public UpdateStatementStrategy(User user) {
+        this.user = user;
+    }
+
     @Override
-    public PreparedStatement makeStatement(Object obj, Connection connection) throws SQLException {
+    public PreparedStatement makeStatement(Connection connection) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(
                 "update userinfo set name = ?, password = ? where id = ?"
         );
-        User user = (User) obj;
         preparedStatement.setString(1, user.getName());
         preparedStatement.setString(2, user.getPassword());
         preparedStatement.setInt(3, user.getId());
