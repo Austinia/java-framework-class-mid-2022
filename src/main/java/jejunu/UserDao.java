@@ -1,6 +1,8 @@
+package jejunu;
+
 import java.sql.*;
 
-public class UserDao {
+public abstract class UserDao {
     public User findById(Integer id) throws ClassNotFoundException, SQLException {
         //드라이버
         Class.forName("com.mysql.cj.jdbc.Driver");
@@ -28,7 +30,9 @@ public class UserDao {
         resultSet.close();
         preparedStatement.close();
         connection.close();
-        //User 리턴
+        //jejunu.mid.User 리턴
         return user;
-}}
+}
 
+    public abstract Connection getConnection() throws ClassNotFoundException, SQLException;
+}
