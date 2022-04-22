@@ -2,16 +2,10 @@ package jejunu;
 
 import java.sql.*;
 
-public abstract class UserDao {
+public abstract class UserDao implements connectionMaker {
+    @Override
     public User findById(Integer id) throws ClassNotFoundException, SQLException {
-        //드라이버
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        //커넥션
-        Connection connection = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/jejunu",
-                "jeju",
-                "jeju"
-        );
+        Connection connection = getConnection();
         //sql
         PreparedStatement preparedStatement =
                 connection.prepareStatement(
@@ -30,9 +24,8 @@ public abstract class UserDao {
         resultSet.close();
         preparedStatement.close();
         connection.close();
-        //jejunu.mid.User 리턴
+        //리턴
         return user;
 }
-
     public abstract Connection getConnection() throws ClassNotFoundException, SQLException;
 }
